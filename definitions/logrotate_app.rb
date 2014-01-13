@@ -29,13 +29,14 @@ log_rotate_params = {
   :prerotate      => nil,
   :firstaction    => nil,
   :lastaction     => nil,
-  :sharedscripts  => false
+  :sharedscripts  => false,
+  :location       => "/etc/logrotate.d"
 }
 
 define(:logrotate_app, log_rotate_params) do
   include_recipe 'logrotate::default'
 
-  acceptable_options = %w(missingok compress delaycompress dateext dateyesterday copytruncate notifempty delaycompress ifempty mailfirst nocompress nocopy nocopytruncate nocreate nodelaycompress nomail nomissingok noolddir nosharedscripts notifempty sharedscripts)
+  acceptable_options = %w(missingok compress delaycompress dateext dateyesterday copytruncate notifempty delaycompress ifempty mailfirst nocompress nocopy nocopytruncate nocreate nodelaycompress nomail nomissingok noolddir nosharedscripts notifempty sharedscripts location)
   options_tmp = params[:options] ||= %w(missingok compress delaycompress copytruncate notifempty)
   options = options_tmp.respond_to?(:each) ? options_tmp : options_tmp.split
 
@@ -45,7 +46,7 @@ define(:logrotate_app, log_rotate_params) do
       Chef::Application.fatal! "The passed value(s) [#{invalid_options.join(',')}] are not valid"
     end
 
-    template "/etc/logrotate.d/#{params[:name]}" do
+    template "#{params[:location]}/#{params[:name]}" do
       source   params[:template]
       cookbook params[:cookbook]
       mode     params[:template_mode]
