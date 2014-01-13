@@ -24,10 +24,7 @@ log_rotate_params = {
   :cookbook       => 'logrotate',
   :template_mode  => '0440',
   :template_owner => 'root',
-  :template_group => value_for_platform(
-            "mac_os_x" => { "default" => "admin" },
-            "default" => "root"
-        ),
+  :template_group => 'root',
   :postrotate     => nil,
   :prerotate      => nil,
   :firstaction    => nil,
